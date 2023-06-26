@@ -38,12 +38,15 @@ export function SignupPage() {
   )
 
   return (
-    <section>
-      <form onSubmit={onSubmit}>
-        <img src={Logo} className="bg-logo" alt="Logo TaskManager" />
-        <h2>Task Manager</h2>
-        <p>Crie sua conta!</p>
-        <p>Preencha as informações abaixo.</p>
+    <section className="section">
+      <form className="form" onSubmit={onSubmit}>
+        <div className="form-header">
+          <img src={Logo} className="bg-logo" alt="Logo TaskManager" />
+          <h2>Task Manager</h2>
+          <p>Crie sua conta!</p>
+          <p>Preencha as suas informações.</p>
+          <p>Gerencie as suas tarefas.</p>
+        </div>
         <div className="form-items">
           <div className="fullname">
             <TextField

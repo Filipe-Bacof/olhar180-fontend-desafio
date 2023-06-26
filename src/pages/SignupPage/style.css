@@ -5,6 +5,14 @@ section {
   align-items: center;
 }
 
+.section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 form {
   display: flex;
   flex-direction: column;
@@ -12,12 +20,27 @@ form {
   align-items: center;
 }
 
+.form {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 4rem;
+}
+
 .form-items {
   display: flex;
   flex-direction: column;
   gap: 2rem;
   margin-top: 1.5rem;
-
+  margin-left: 4rem;
 }
 
 .bg-logo {
@@ -45,4 +68,18 @@ h2 {
   justify-content: center;
   align-items: center;
   gap: 30px;
+}
+
+@media (max-width: 800px){
+  .form {
+    flex-direction: column;
+  }
+
+  .form-header {
+    margin-right: 0;
+  }
+  
+  .form-items {
+    margin-left: 0;
+  }
 }
