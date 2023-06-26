@@ -32,12 +32,12 @@ export function ModalDeleteTask({
   currentTask,
 }: ModalDeleteTaskProps) {
   const queryClient = useQueryClient()
-  // Delete user Mutation
+  // Delete task Mutation
   const { mutate } = useMutation((id: number) => deleteTask(id), {
     onSuccess: () => {
       queryClient.invalidateQueries(['tasks'])
       setIsOpen((prevState) => !prevState)
-      toast.success('Esta tarefa foi deletado!')
+      toast.success('Esta tarefa foi deletada!')
     },
     onError: () => {
       toast.error('Ocorreu algum erro ao deletar esta tarefa!')

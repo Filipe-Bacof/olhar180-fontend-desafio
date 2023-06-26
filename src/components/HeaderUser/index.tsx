@@ -6,6 +6,7 @@ import { useAuthStore } from '../../stores/userStore'
 import Cookies from 'js-cookie'
 import { useNavigate } from 'react-router-dom'
 import { ExitToApp } from '@mui/icons-material'
+import './style.css'
 
 export function HeaderUser() {
   const [isShow, setIsShow] = useState(false)
@@ -47,10 +48,18 @@ export function HeaderUser() {
     navigate('/')
   }
 
+  function getGithubPhoto() {
+    const urlParts: any = user?.githubUrl?.split('/')
+    const username = urlParts[urlParts.length - 1]
+
+    return `https://avatars.githubusercontent.com/${username}`
+  }
+
   return (
     <Box
       sx={{
         position: 'relative',
+        width: '200px',
       }}
     >
       <Box
@@ -63,10 +72,18 @@ export function HeaderUser() {
         onClick={() => setIsShow((prevState) => !prevState)}
       >
         <Typography>{`${user.name} ${user.surname}`}</Typography>
-        <Avatar
-          alt="avatar"
-          {...stringAvatar(`${user.name} ${user.surname}`)}
-        />
+        {user.githubUrl ? (
+          <img
+            className="profilepic"
+            src={getGithubPhoto()}
+            alt={`Foto de perfil de ${user.name}`}
+          />
+        ) : (
+          <Avatar
+            alt="avatar"
+            {...stringAvatar(`${user.name} ${user.surname}`)}
+          />
+        )}
       </Box>
 
       <Box
