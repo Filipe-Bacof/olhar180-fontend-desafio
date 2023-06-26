@@ -57,7 +57,7 @@ export function LoginPage() {
             <Button id="button-primary" type="submit" variant="contained">
               Acessar
             </Button>
-            <Link to={'/register'}>
+            <Link to={'/signup'}>
               <h3>Ainda não tem uma conta?</h3>
             </Link>
           </div>

@@ -10,7 +10,7 @@ export interface UserRegister {
   surname: string
   email: string
   password: string
-  githubUrl?: string
+  githubUrl: string | null
   token?: string
 }
 

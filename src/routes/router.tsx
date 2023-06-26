@@ -3,6 +3,7 @@ import { PrivateRoutes } from './privateRoutes'
 
 // Pages imports
 import { LoginPage } from '../pages/LoginPage'
+import { SignupPage } from '../pages/SignupPage'
 import { Dashboard } from '../pages/Dashboard'
 import { ListTasks } from '../pages/Dashboard/pages/ListTasks'
 import { Profile } from '../pages/Dashboard/pages/Profile'
@@ -16,6 +17,7 @@ export function Router() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route element={<PrivateRoutes />}>
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="tasks" element={<ListTasks />} />
