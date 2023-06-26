@@ -62,14 +62,14 @@ export function ModalDeleteTask({
         <DialogActions>
           <Button
             variant="contained"
-            color="error"
+            color="primary"
             onClick={() => setIsOpen((prevState) => !prevState)}
           >
             Cancelar
           </Button>
           <Button
             variant="contained"
-            color="warning"
+            color="error"
             onClick={() => mutate(currentTask)}
           >
             Deletar

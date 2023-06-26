@@ -1,5 +1,12 @@
-import { Button, CircularProgress, MenuItem, TextField } from '@mui/material'
-import { useMutation } from '@tanstack/react-query'
+import {
+  Box,
+  Button,
+  CircularProgress,
+  MenuItem,
+  TextField,
+  Typography,
+} from '@mui/material'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { Modal } from '../../../../../../components/ModalGeneral'
 import { useAuthStore } from '../../../../../../stores/userStore'
 import { RegisterTask } from '../../../../../../interfaces/tasks.interface'
@@ -7,6 +14,8 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import { createTask } from '../../../../../../services/tasks.service'
+import { generateTimestampWithDateAndTime } from '../../../../../../utils/timeControl'
+import './style.css'
 
 interface ModalRegisterTaskProps {
   isOpen: boolean
@@ -17,6 +26,7 @@ export function ModalRegisterTask({
   isOpen,
   setIsOpen,
 }: ModalRegisterTaskProps) {
+  const queryClient = useQueryClient()
   const { register, handleSubmit, reset } = useForm<RegisterTask>({})
 
   const [priority, setPriority] = useState('')
@@ -24,13 +34,13 @@ export function ModalRegisterTask({
   const { user } = useAuthStore((state) => state)
 
   const { mutate, isLoading } = useMutation(
-    ({ title, description, conclusionDate, priority }: RegisterTask) =>
+    ({ title, description, conclusionDate, priority, userId }: RegisterTask) =>
       createTask({
-        title: title?.trim(),
-        description: description?.trim(),
-        priority: priority?.trim(),
+        title,
+        description,
+        priority,
         conclusionDate,
-        userId: user.id,
+        userId,
       }),
     {
       onSuccess: () => {
@@ -38,6 +48,11 @@ export function ModalRegisterTask({
           autoClose: 1500,
         })
         reset()
+        setChosenDay('')
+        setChosenHour('')
+        setPriority('')
+        setIsOpen((prevState) => !prevState)
+        queryClient.invalidateQueries(['tasks'])
       },
       onError: () => {
         toast.error('Ocorreu algum erro ao criar a tarefa', {
@@ -47,21 +62,23 @@ export function ModalRegisterTask({
     },
   )
 
-  const onSubmit = handleSubmit(
-    ({ title, description, conclusionDate, priority }) => {
-      mutate({
-        title: title?.trim(),
-        description: description?.trim(),
-        priority: priority?.trim(),
-        conclusionDate,
-        userId: user.id,
-      })
-    },
-  )
+  const onSubmit = handleSubmit(({ title, description, priority }) => {
+    const conclusion = generateTimestampWithDateAndTime(chosenDay, chosenHour)
+    mutate({
+      title: title?.trim(),
+      description: description?.trim(),
+      priority: priority?.trim(),
+      conclusionDate: conclusion,
+      userId: user.id,
+    })
+  })
+
+  const [chosenDay, setChosenDay] = useState('')
+  const [chosenHour, setChosenHour] = useState('')
 
   return (
     <Modal isOpen={isOpen} setIsOpen={setIsOpen} title="Cadastrar usuário">
-      <form onSubmit={onSubmit}>
+      <form className="form" onSubmit={onSubmit}>
         <TextField
           required
           color="primary"
@@ -78,15 +95,31 @@ export function ModalRegisterTask({
           sx={{ width: '100%' }}
           {...register('description')}
         />
+        <Typography sx={{ paddingRight: '12rem' }} noWrap component="div">
+          Data de Conclusão
+        </Typography>
+        <Box sx={{ display: 'flex', gap: '1rem' }}>
+          <TextField
+            sx={{ display: 'flex', width: '160px' }}
+            type="date"
+            color="warning"
+            variant="outlined"
+            required
+            value={chosenDay}
+            onChange={(e) => setChosenDay(e.target.value)}
+          />
+          <TextField
+            sx={{ display: 'flex', width: '160px' }}
+            type="time"
+            color="warning"
+            variant="outlined"
+            value={chosenHour}
+            onChange={(e) => setChosenHour(e.target.value)}
+            required
+          />
+        </Box>
         <TextField
-          required
-          color="primary"
-          label="Data de Conclusão"
-          type="number"
-          {...register('conclusionDate')}
-        />
-
-        <TextField
+          sx={{ display: 'flex', width: '100%' }}
           required
           color="primary"
           select
@@ -97,17 +130,16 @@ export function ModalRegisterTask({
           value={priority}
           onChange={(event) => setPriority(event.target.value)}
         >
-          <MenuItem value={'Baixa'} key={1}>
+          <MenuItem value={'baixa'} key={1}>
             Baixa
           </MenuItem>
-          <MenuItem value={'Média'} key={2}>
+          <MenuItem value={'media'} key={2}>
             Média
           </MenuItem>
-          <MenuItem value={'Alta'} key={3}>
+          <MenuItem value={'alta'} key={3}>
             Alta
           </MenuItem>
         </TextField>
-
         <Button
           id="button-primary"
           type="submit"

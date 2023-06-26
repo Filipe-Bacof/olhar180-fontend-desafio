@@ -21,13 +21,9 @@ import {
 
 // Icons
 import IconButton from '@mui/material/IconButton'
-import {
-  AccessTime,
-  ChevronLeft,
-  ChevronRight,
-  ExitToApp,
-  Menu,
-} from '@mui/icons-material'
+import TaskIcon from '@mui/icons-material/Task'
+import PersonIcon from '@mui/icons-material/Person'
+import { ChevronLeft, ChevronRight, ExitToApp, Menu } from '@mui/icons-material'
 
 // Components
 import { HeaderUser } from '../../components/HeaderUser'
@@ -135,7 +131,7 @@ export function SidebarAndAppBar({ children }: SidebarAndAppBarProps) {
             <Tooltip
               title="Ver Nome de todas as opções do Menu"
               arrow
-              placement="bottom"
+              placement="right"
             >
               <Menu />
             </Tooltip>
@@ -149,7 +145,22 @@ export function SidebarAndAppBar({ children }: SidebarAndAppBarProps) {
               width: '100%',
             }}
           >
-            <img src={Logo} alt="TaskManager Logo" width="200px" />
+            <Box
+              className="mobile"
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'left',
+                width: '100%',
+                gap: '1.5rem',
+              }}
+            >
+              <img src={Logo} alt="TaskManager Logo" width="50px" />
+              <Typography variant="h5" noWrap component="div">
+                Gerenciador de Tarefas
+              </Typography>
+            </Box>
+
             <HeaderUser />
           </Box>
         </Toolbar>
@@ -183,11 +194,38 @@ export function SidebarAndAppBar({ children }: SidebarAndAppBarProps) {
                   }}
                 >
                   <Tooltip title="Tasks" arrow placement="right">
-                    <AccessTime />
+                    <TaskIcon />
                   </Tooltip>
                 </ListItemIcon>
                 <ListItemText
                   primary={'Tasks'}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          </Link>
+          <Link to="profile">
+            <ListItem disablePadding>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Tooltip title="Usuário" arrow placement="right">
+                    <PersonIcon />
+                  </Tooltip>
+                </ListItemIcon>
+                <ListItemText
+                  primary={'Usuário'}
                   sx={{ opacity: open ? 1 : 0 }}
                 />
               </ListItemButton>

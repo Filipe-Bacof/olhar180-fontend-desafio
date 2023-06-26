@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getUserById } from '../../../../services/auth.service'
 import {
   Table,
@@ -14,7 +14,10 @@ import {
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
-import { TaskInfo } from '../../../../interfaces/tasks.interface'
+import {
+  TaskInfo,
+  UpdateComplete,
+} from '../../../../interfaces/tasks.interface'
 import { EmptyList } from '../../../../components/EmptyList'
 import { ModalEditTask } from './components/ModalEditTask'
 import { StyledTableCell } from '../../../../components/StyledTableCell'
@@ -22,9 +25,16 @@ import { StyledTableRow } from '../../../../components/StyledTableRow'
 import { ModalRegisterTask } from './components/ModalRegisterTask'
 import { ModalDeleteTask } from './components/ModalDeleteTask'
 import { useAuthStore } from '../../../../stores/userStore'
+import { SwitchIOS } from '../../../../components/SwitchIOS'
+import { updateCompleted } from '../../../../services/tasks.service'
+import {
+  generateDateWithTimestamp,
+  generateTimeWithTimestamp,
+} from '../../../../utils/timeControl'
 
 export function ListTasks() {
   const { user } = useAuthStore((state) => state)
+  const queryClient = useQueryClient()
   const [isAddingTask, setIsAddingTask] = useState(false)
   const [isEditingTask, setIsEditingTask] = useState(false)
   const [isDeletingTask, setIsDeletingTask] = useState(false)
@@ -32,6 +42,16 @@ export function ListTasks() {
   const { data: tasks, isLoading } = useQuery(['tasks'], () =>
     getUserById(user.id),
   )
+
+  const { mutate: updateConclusion, isLoading: updatingConclusion } =
+    useMutation(
+      ({ id, completed }: UpdateComplete) => updateCompleted(id, completed),
+      {
+        onSuccess: () => {
+          queryClient.invalidateQueries(['tasks'])
+        },
+      },
+    )
 
   return (
     <div>
@@ -51,7 +71,7 @@ export function ListTasks() {
           color="primary"
           onClick={() => setIsAddingTask((prevState) => !prevState)}
         >
-          Nova Tarefa
+          Adicionar Tarefa
         </Button>
       </Box>
       {isLoading ? (
@@ -83,17 +103,16 @@ export function ListTasks() {
                             Descrição
                           </StyledTableCell>
                           <StyledTableCell align="center">
-                            Data de Conclusão
+                            Data Limite
+                          </StyledTableCell>
+                          <StyledTableCell align="center">
+                            Concluída
                           </StyledTableCell>
                           <StyledTableCell align="center">
                             Prioridade
                           </StyledTableCell>
                           <StyledTableCell align="center">
-                            Data de Criação
-                          </StyledTableCell>
-
-                          <StyledTableCell align="center">
-                            Controles
+                            Ações
                           </StyledTableCell>
                         </TableRow>
                       </TableHead>
@@ -104,25 +123,42 @@ export function ListTasks() {
                             title,
                             description,
                             conclusionDate,
+                            completed,
                             priority,
-                            createdAt,
                           }: TaskInfo) => (
                             <StyledTableRow key={id}>
                               <StyledTableCell align="center">
                                 {title}
                               </StyledTableCell>
-
                               <StyledTableCell align="center">
                                 {description}
                               </StyledTableCell>
                               <StyledTableCell align="center">
-                                {conclusionDate}
+                                {generateDateWithTimestamp(conclusionDate)} -{' '}
+                                {generateTimeWithTimestamp(conclusionDate)}
                               </StyledTableCell>
                               <StyledTableCell align="center">
+                                <SwitchIOS
+                                  color="warning"
+                                  checked={completed === 1}
+                                  disabled={updatingConclusion}
+                                  onChange={() => {
+                                    const newValue = completed === 1 ? 0 : 1
+                                    updateConclusion({
+                                      id,
+                                      completed: newValue,
+                                    })
+                                  }}
+                                  inputProps={{ 'aria-label': 'controlled' }}
+                                />
+                              </StyledTableCell>
+                              <StyledTableCell
+                                sx={{
+                                  textTransform: 'capitalize',
+                                }}
+                                align="center"
+                              >
                                 {priority}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
-                                {createdAt}
                               </StyledTableCell>
                               <StyledTableCell
                                 sx={{
@@ -155,29 +191,25 @@ export function ListTasks() {
                   </div>
                 </div>
               </Paper>
-
-              <ModalEditTask
-                isOpen={isEditingTask}
-                setIsOpen={setIsEditingTask}
-                currentTask={currentTask || 0}
-              />
-
-              <ModalRegisterTask
-                isOpen={isAddingTask}
-                setIsOpen={setIsAddingTask}
-              />
-
-              <ModalDeleteTask
-                isOpen={isDeletingTask}
-                setIsOpen={setIsDeletingTask}
-                currentTask={currentTask || 0}
-              />
             </div>
           ) : (
             <EmptyList />
           )}
         </>
       )}
+      <ModalEditTask
+        isOpen={isEditingTask}
+        setIsOpen={setIsEditingTask}
+        currentTask={currentTask || 0}
+      />
+
+      <ModalRegisterTask isOpen={isAddingTask} setIsOpen={setIsAddingTask} />
+
+      <ModalDeleteTask
+        isOpen={isDeletingTask}
+        setIsOpen={setIsDeletingTask}
+        currentTask={currentTask || 0}
+      />
     </div>
   )
 }
