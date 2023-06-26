@@ -20,7 +20,7 @@ form {
   align-items: center;
 }
 
-.form {
+.form-signup {
   display: flex;
   flex-direction: row;
   justify-content: center;

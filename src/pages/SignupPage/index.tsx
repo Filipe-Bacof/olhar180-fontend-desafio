@@ -39,7 +39,7 @@ export function SignupPage() {
 
   return (
     <section className="section">
-      <form className="form" onSubmit={onSubmit}>
+      <form className="form-signup" onSubmit={onSubmit}>
         <div className="form-header">
           <img src={Logo} className="bg-logo" alt="Logo TaskManager" />
           <h2>Task Manager</h2>

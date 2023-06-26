@@ -11,9 +11,11 @@ import {
   Box,
   CircularProgress,
   Button,
+  Tooltip,
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
+import WarningIcon from '@mui/icons-material/Warning'
 import {
   TaskInfo,
   UpdateComplete,
@@ -42,6 +44,12 @@ export function ListTasks() {
   const { data: tasks, isLoading } = useQuery(['tasks'], () =>
     getUserById(user.id),
   )
+
+  function verifyIfThisIsLate(date: number) {
+    const timestamp = new Date(date)
+    const datenow = new Date()
+    return datenow > timestamp
+  }
 
   const { mutate: updateConclusion, isLoading: updatingConclusion } =
     useMutation(
@@ -133,9 +141,33 @@ export function ListTasks() {
                               <StyledTableCell align="center">
                                 {description}
                               </StyledTableCell>
-                              <StyledTableCell align="center">
-                                {generateDateWithTimestamp(conclusionDate)} -{' '}
-                                {generateTimeWithTimestamp(conclusionDate)}
+                              <StyledTableCell
+                                sx={{
+                                  color:
+                                    verifyIfThisIsLate(conclusionDate) &&
+                                    completed === 0
+                                      ? 'red'
+                                      : '',
+                                  display: 'flex',
+                                  justifyContent: 'center',
+                                  alignItems: 'center',
+                                }}
+                                align="center"
+                              >
+                                {verifyIfThisIsLate(conclusionDate) &&
+                                  completed === 0 && (
+                                    <Tooltip
+                                      title="Essa tarefa está atrasada"
+                                      arrow
+                                      placement="bottom"
+                                    >
+                                      <WarningIcon />
+                                    </Tooltip>
+                                  )}
+                                &nbsp;
+                                {generateDateWithTimestamp(
+                                  conclusionDate,
+                                )} - {generateTimeWithTimestamp(conclusionDate)}
                               </StyledTableCell>
                               <StyledTableCell align="center">
                                 <SwitchIOS
@@ -155,6 +187,13 @@ export function ListTasks() {
                               <StyledTableCell
                                 sx={{
                                   textTransform: 'capitalize',
+                                  fontWeight: 'bold',
+                                  color:
+                                    priority === 'alta'
+                                      ? 'red'
+                                      : priority === 'media'
+                                      ? 'orange'
+                                      : 'green',
                                 }}
                                 align="center"
                               >
