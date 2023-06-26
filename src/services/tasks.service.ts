@@ -52,7 +52,7 @@ export const updateTask = async (
 }
 
 export const updateCompleted = async (id: number, completed: number) => {
-  const result = await Api.put(`/tasks/${id}`, {
+  const result = await Api.patch(`/tasks/${id}`, {
     completed,
   })
 
