@@ -3,8 +3,8 @@ import Cookies from 'js-cookie'
 
 export const Api: AxiosInstance = Axios.create({
   baseURL: 'https://olhar180-backend-desafio-production.up.railway.app',
-  // baseURL: 'http://localhost:3004',
   withCredentials: true,
+  // baseURL: 'http://localhost:3004',
 })
 
 Api.interceptors.request.use(
