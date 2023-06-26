@@ -177,7 +177,7 @@ export function SidebarAndAppBar({ children }: SidebarAndAppBarProps) {
         <Divider />
 
         <List>
-          <Link to="tasks">
+          <Link to="tasks" style={{ textDecoration: 'none' }}>
             <ListItem disablePadding>
               <ListItemButton
                 sx={{
@@ -199,12 +199,16 @@ export function SidebarAndAppBar({ children }: SidebarAndAppBarProps) {
                 </ListItemIcon>
                 <ListItemText
                   primary={'Tasks'}
-                  sx={{ opacity: open ? 1 : 0 }}
+                  sx={{
+                    opacity: open ? 1 : 0,
+                    color: theme.palette.mode === 'dark' ? 'white' : 'black',
+                    textDecoration: 'none',
+                  }}
                 />
               </ListItemButton>
             </ListItem>
           </Link>
-          <Link to="profile">
+          <Link to="profile" style={{ textDecoration: 'none' }}>
             <ListItem disablePadding>
               <ListItemButton
                 sx={{
@@ -226,7 +230,11 @@ export function SidebarAndAppBar({ children }: SidebarAndAppBarProps) {
                 </ListItemIcon>
                 <ListItemText
                   primary={'Usuário'}
-                  sx={{ opacity: open ? 1 : 0 }}
+                  sx={{
+                    opacity: open ? 1 : 0,
+                    color: theme.palette.mode === 'dark' ? 'white' : 'black',
+                    textDecoration: 'none',
+                  }}
                 />
               </ListItemButton>
             </ListItem>

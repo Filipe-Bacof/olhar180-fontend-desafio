@@ -123,7 +123,7 @@ export function HeaderUser() {
           }}
           onClick={logOut}
         >
-          <ExitToApp fontSize="large" color="warning" />
+          <ExitToApp fontSize="large" color="error" />
           <Typography variant="inherit" color={!theme ? 'white' : 'black'}>
             Sair
           </Typography>
