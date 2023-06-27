@@ -82,6 +82,9 @@ export function Profile() {
             alignItems: 'center',
             marginBlock: '4rem',
             gap: '1rem',
+            '@media (max-width: 800px)': {
+              width: '100%',
+            },
           }}
         >
           <Typography variant="h6">Altere o seu nome de usuário:</Typography>

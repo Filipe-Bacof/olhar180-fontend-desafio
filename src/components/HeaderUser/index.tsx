@@ -49,10 +49,26 @@ export function HeaderUser() {
   }
 
   function getGithubPhoto() {
-    const urlParts: any = user?.githubUrl?.split('/')
-    const username = urlParts[urlParts.length - 1]
-
-    return `https://avatars.githubusercontent.com/${username}`
+    const regex = /github.com\/([^/]+)/
+    const match = user?.githubUrl?.match(regex)
+    if (match) {
+      const urlParts: any = user?.githubUrl?.split('/')
+      const username = urlParts[urlParts.length - 1]
+      return (
+        <img
+          className="profilepic"
+          src={`https://avatars.githubusercontent.com/${username}`}
+          alt={`Foto de perfil de ${user.name}`}
+        />
+      )
+    } else {
+      return (
+        <Avatar
+          alt="avatar"
+          {...stringAvatar(`${user.name} ${user.surname}`)}
+        />
+      )
+    }
   }
 
   return (
@@ -73,11 +89,7 @@ export function HeaderUser() {
       >
         <Typography>{`${user.name} ${user.surname}`}</Typography>
         {user.githubUrl ? (
-          <img
-            className="profilepic"
-            src={getGithubPhoto()}
-            alt={`Foto de perfil de ${user.name}`}
-          />
+          getGithubPhoto()
         ) : (
           <Avatar
             alt="avatar"

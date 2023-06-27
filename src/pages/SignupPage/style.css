@@ -71,7 +71,7 @@ h2 {
 }
 
 @media (max-width: 800px){
-  .form {
+  .form-signup {
     flex-direction: column;
   }
 
