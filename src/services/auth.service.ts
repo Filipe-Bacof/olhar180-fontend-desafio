@@ -67,3 +67,20 @@ export const signup = async ({
   })
   return result
 }
+
+export const forgot = async (email: string) => {
+  const result = await Api.post('/auth/forgot', {
+    email,
+  })
+
+  return result
+}
+
+export const newpass = async ({ email, password, token }: User) => {
+  const result = await Api.post('/auth/newpass', {
+    email,
+    password,
+    token,
+  })
+  return result
+}

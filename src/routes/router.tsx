@@ -4,6 +4,8 @@ import { PrivateRoutes } from './privateRoutes'
 // Pages imports
 import { LoginPage } from '../pages/LoginPage'
 import { SignupPage } from '../pages/SignupPage'
+import { ForgotPassword } from '../pages/ForgotPassword'
+import { NewPassword } from '../pages/NewPassword'
 import { Dashboard } from '../pages/Dashboard'
 import { ListTasks } from '../pages/Dashboard/pages/ListTasks'
 import { Profile } from '../pages/Dashboard/pages/Profile'
@@ -18,6 +20,8 @@ export function Router() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/forgotpass" element={<ForgotPassword />} />
+        <Route path="/newpass" element={<NewPassword />} />
         <Route element={<PrivateRoutes />}>
           <Route path="/dashboard" element={<Dashboard />}>
             <Route path="tasks" element={<ListTasks />} />

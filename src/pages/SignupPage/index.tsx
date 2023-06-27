@@ -23,9 +23,9 @@ export function SignupPage() {
         reset()
         navigate('/')
       },
-      onError: () => {
-        toast.error('Ocorreu algum erro ao criar o usuário', {
-          autoClose: 1500,
+      onError: (err: any) => {
+        toast.error(err.response.data.message, {
+          autoClose: 2000,
         })
       },
     },

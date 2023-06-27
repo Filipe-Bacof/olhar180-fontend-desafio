@@ -2,6 +2,7 @@ import { Container } from '@mui/system'
 import { Box, Typography } from '@mui/material'
 import Logo from '../../assets/logo.png'
 import { Link } from 'react-router-dom'
+import '../SignupPage/style.css'
 
 export function Page404() {
   return (
@@ -16,6 +17,7 @@ export function Page404() {
         }}
       >
         <img
+          className="bg-logo"
           src={Logo}
           alt="Logo Aplicação Gerenciamento de Tarefas"
           width="300px"

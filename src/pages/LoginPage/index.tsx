@@ -60,6 +60,9 @@ export function LoginPage() {
             <Link to={'/signup'}>
               <h3>Ainda não tem uma conta?</h3>
             </Link>
+            <Link to={'/forgotpass'}>
+              <h4>Esqueceu sua senha?</h4>
+            </Link>
           </div>
         </div>
       </form>
